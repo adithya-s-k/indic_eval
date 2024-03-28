@@ -25,7 +25,7 @@ import os
 
 import pytest
 
-from lighteval.metrics import (
+from easy_eval.metrics import (
     apply_generative_logprob_metric,
     apply_generative_metric,
     apply_multichoice_metric,
@@ -33,15 +33,15 @@ from lighteval.metrics import (
     apply_perplexity_metric,
     apply_target_perplexity_metric,
 )
-from lighteval.metrics.metrics import MetricCategory, Metrics
-from lighteval.metrics.sample_preparator import (
+from easy_eval.metrics.metrics import MetricCategory, Metrics
+from easy_eval.metrics.sample_preparator import (
     GenerativeCorpusMetricInput,
     LogprobCorpusMetricInput,
     PerplexityCorpusMetricInput,
 )
-from lighteval.models.model_output import ModelReturn
-from lighteval.tasks.requests import Doc
-from lighteval.utils import as_list
+from easy_eval.models.model_output import ModelReturn
+from easy_eval.tasks.requests import Doc
+from easy_eval.utils import as_list
 
 
 PATH_TO_HARNESS_METRICS = os.path.join(os.path.dirname(__file__), "reference_scores/harness_metrics.json")

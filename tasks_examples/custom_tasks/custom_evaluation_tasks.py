@@ -30,10 +30,10 @@ import re
 from dataclasses import asdict
 from typing import Dict, List, Tuple
 
-from lighteval.metrics import Metrics
-from lighteval.tasks.lighteval_task import LightevalTaskConfig
-from lighteval.tasks.requests import Doc
-from lighteval.tasks.tasks_prompt_formatting import LETTER_INDICES
+from easy_eval.metrics import Metrics
+from easy_eval.tasks.lighteval_task import LightevalTaskConfig
+from easy_eval.tasks.requests import Doc
+from easy_eval.tasks.tasks_prompt_formatting import LETTER_INDICES
 
 
 _TASKS_STRINGS: List[Tuple[LightevalTaskConfig, str]] = []

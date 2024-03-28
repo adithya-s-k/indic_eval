@@ -22,16 +22,16 @@
 
 # ruff: noqa: F405, F403, F401
 """
-Custom evaluation tasks for lighteval
+Custom evaluation tasks for easy_eval
 
 This file generally create just a TASKS_TABLE and TASKS_GROUPS which are then imported by LightEval.
 """
 import random
 import re
 
-from lighteval.tasks.lighteval_task import LightevalTaskConfig
-from lighteval.tasks.requests import Doc
-from lighteval.tasks.tasks_prompt_formatting import LETTER_INDICES
+from easy_eval.tasks.lighteval_task import LightevalTaskConfig
+from easy_eval.tasks.requests import Doc
+from easy_eval.tasks.tasks_prompt_formatting import LETTER_INDICES
 
 
 # fmt: off
@@ -580,7 +580,7 @@ _TASKS = (
     + [sciq_ar_task]
 )
 
-# Convert to dict for lighteval
+# Convert to dict for easy_eval
 TASKS_TABLE = [task.as_dict() for task in _TASKS]
 
 if __name__ == "__main__":

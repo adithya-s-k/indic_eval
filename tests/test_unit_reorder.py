@@ -23,8 +23,8 @@
 import pytest
 from transformers import AutoTokenizer
 
-from lighteval.data import GenerativeTaskDataset
-from lighteval.tasks.requests import GreedyUntilRequest
+from easy_eval.data import GenerativeTaskDataset
+from easy_eval.tasks.requests import GreedyUntilRequest
 
 
 # test data that will need to be sorted by length of the string

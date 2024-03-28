@@ -26,7 +26,7 @@ import os
 import pytest
 from pytest import approx
 
-from lighteval.main_accelerate import main  # noqa: E402
+from easy_eval.main_accelerate import main  # noqa: E402
 from run_evals_accelerate import get_parser
 from tests.reference_scores.reference_task_scores import RESULTS_FULL, RESULTS_LITE  # noqa: E402
 from tests.reference_scores.reference_tasks import ALL_SUBSETS
