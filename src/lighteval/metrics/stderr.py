@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2024 Eleuther AI and The HuggingFace Team
+# Copyright (c) 2024 Eleuther AI and Adithya S K
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
