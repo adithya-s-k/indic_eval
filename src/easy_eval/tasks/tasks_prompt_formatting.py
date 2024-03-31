@@ -76,6 +76,14 @@ def arc(line, task_name: str = None):
         gold_index=line["choices"]["label"].index(line["answerKey"]),
     )
 
+def arc_indic(line, task_name: str = None):
+    return Doc(
+        task_name=task_name,
+        query=f"Question: {line['translated_question']}\nAnswer:",
+        choices=[f" {c}" for c in line["translated_choices"]["text"]],
+        gold_index=line["translated_choices"]["label"].index(line["answerKey"]),
+    )
+
 
 def arc_with_options_letters_predict(line, task_name: str = None):
     query = f"Question: {line['question']}\n"
