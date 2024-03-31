@@ -780,6 +780,29 @@ def hellaswag_harness(line, task_name: str = None):
         gold_index=int(line["label"]) if line["label"] != "" else -1,  # -1 for test
         # "metric": "choices_loglikelihood",
     )
+def hellaswag_harness_indic(line, task_name: str = None):
+    def preprocess(text):
+        """Comes from AiHarness"""
+        # text = text.strip()
+        # NOTE: Brackets are artifacts of the WikiHow dataset portion of HellaSwag.
+        text = text.replace(" [title]", ". ")
+        text = re.sub("\\[.*?\\]", "", text)
+        text = text.replace("  ", " ")
+        return text
+
+    # steps to get ctx_b as we didnt translate form the original dataset but merged it with the translated ending
+    choices = [preprocess(ending) for ending in line["translated_endings"]]
+    right_label = int(line["label"]) if line["label"] != "" else -1
+    ctx_b = choices[right_label]
+    ctx_b = ' '.join(ctx_b.split()[:2]) # gets the first two words from the correct option as the starting tokens
+    ctx = f"{line['translated_ctx_a']} {ctx_b}"
+    return Doc(
+        task_name=task_name,
+        query=preprocess(ctx),
+        choices=[preprocess(ending) for ending in line["translated_endings"]],
+        gold_index=int(line["label"]) if line["label"] != "" else -1,  # -1 for test
+        # "metric": "choices_loglikelihood",
+    )
 
 
 def hellaswag_helm(line, task_name: str = None):
