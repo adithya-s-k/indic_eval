@@ -474,6 +474,14 @@ def boolq_helm_contrastset(line, task_name: str = None):
     ][0]
 
 
+def boolq_harness_indic(line, task_name: str = None):
+    return Doc(
+        task_name=task_name,
+        query=f"{line['translated_passage']}\nQuestion: {line['translated_question']}?\nAnswer:",
+        choices=[" no", " yes"],  # False is label 0
+        gold_index=int(line["label"]),
+    )
+    
 def boolq_harness(line, task_name: str = None):
     return Doc(
         task_name=task_name,
