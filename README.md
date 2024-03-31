@@ -64,7 +64,7 @@ Lastly, if you intend to push to the code base, you'll need to install the preco
 ```bash
 pip install .[dev]
 pre-commit install
-```
+``` 
 
 ## Usage
 

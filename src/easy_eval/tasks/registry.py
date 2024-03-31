@@ -44,6 +44,7 @@ from easy_eval.utils import CANNOT_USE_EXTENDED_TASKS_MSG, can_load_extended_tas
 # Extended are for evaluations with custom logic
 # Custom is for all the experiments you might want to do!
 DEFAULT_SUITES = [
+    "indiceval",
     "helm",
     "bigbench",
     "harness",
