@@ -22,8 +22,8 @@
 
 import pytest
 
-from easy_eval.metrics.metrics_sample import ExactMatches
-from easy_eval.metrics.normalizations import helm_normalizer
+from indic_eval.metrics.metrics_sample import ExactMatches
+from indic_eval.metrics.normalizations import helm_normalizer
 
 
 class TestBaseMetrics:

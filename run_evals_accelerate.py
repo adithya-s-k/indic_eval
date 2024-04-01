@@ -26,7 +26,7 @@ accelerate launch run_evals_accelerate.py --tasks="leaderboard|hellaswag|5|1" --
 """
 import argparse
 
-from easy_eval.main_accelerate import CACHE_DIR, main
+from indic_eval.main_accelerate import CACHE_DIR, main
 
 
 def get_parser():

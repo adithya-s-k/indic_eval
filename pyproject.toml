@@ -12,7 +12,7 @@ preview = true
 
 [tool.ruff.lint.isort]
 lines-after-imports = 2
-known-first-party = ["easy_eval"]
+known-first-party = ["indic_eval"]
 
 [tool.ruff.format]
 quote-style = "double" # Like Black, use double quotes for strings.
@@ -29,7 +29,7 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [project]
-name = "easy_eval"
+name = "indic_eval"
 version = "0.3.0.dev0"
 authors = [
   { name="Adithya S Kolavi", email="adithyaskolavi@gmail.com" }
@@ -83,13 +83,13 @@ nanotron = [
 ]
 quality = ["ruff==v0.2.2","pre-commit"]
 tests = ["pytest==7.4.0"]
-dev = ["easy_eval[accelerate,quality,tests]"]
+dev = ["indic_eval[accelerate,quality,tests]"]
 extended_tasks = [
   "langdetect", #ifeval
 ]
 
 [project.urls]
-Homepage = "https://github.com/adithya-s-k/easy_eval"
-Issues = "https://github.com/adithya-s-k/easy_eval/issues"
+Homepage = "https://github.com/adithya-s-k/indic_eval"
+Issues = "https://github.com/adithya-s-k/indic_eval/issues"
 # Documentation = ""
-# Changelog = "https://github.com/adithya-s-k/easy_eval/blob/master/CHANGELOG.md"
+# Changelog = "https://github.com/adithya-s-k/indic_eval/blob/master/CHANGELOG.md"

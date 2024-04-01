@@ -25,8 +25,8 @@ import os
 
 import pytest
 
-import easy_eval.tasks.tasks_prompt_formatting as tasks_prompt_formatting
-from easy_eval.tasks.requests import Doc
+import indic_eval.tasks.tasks_prompt_formatting as tasks_prompt_formatting
+from indic_eval.tasks.requests import Doc
 
 
 PATH_TO_HARNESS_PROMPTS = os.path.join(os.path.dirname(__file__), "reference_scores/harness_prompts.json")

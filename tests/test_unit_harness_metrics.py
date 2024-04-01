@@ -25,7 +25,7 @@ import os
 
 import pytest
 
-from easy_eval.metrics import (
+from indic_eval.metrics import (
     apply_generative_logprob_metric,
     apply_generative_metric,
     apply_multichoice_metric,
@@ -33,15 +33,15 @@ from easy_eval.metrics import (
     apply_perplexity_metric,
     apply_target_perplexity_metric,
 )
-from easy_eval.metrics.metrics import MetricCategory, Metrics
-from easy_eval.metrics.sample_preparator import (
+from indic_eval.metrics.metrics import MetricCategory, Metrics
+from indic_eval.metrics.sample_preparator import (
     GenerativeCorpusMetricInput,
     LogprobCorpusMetricInput,
     PerplexityCorpusMetricInput,
 )
-from easy_eval.models.model_output import ModelReturn
-from easy_eval.tasks.requests import Doc
-from easy_eval.utils import as_list
+from indic_eval.models.model_output import ModelReturn
+from indic_eval.tasks.requests import Doc
+from indic_eval.utils import as_list
 
 
 PATH_TO_HARNESS_METRICS = os.path.join(os.path.dirname(__file__), "reference_scores/harness_metrics.json")

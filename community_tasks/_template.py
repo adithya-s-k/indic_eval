@@ -22,7 +22,7 @@
 
 # ruff: noqa: F405, F403, F401
 """
-Custom evaluation tasks for easy_eval. Copy this file and complete it with the info for your task.
+Custom evaluation tasks for indic_eval. Copy this file and complete it with the info for your task.
 
 This file generally create just a TASKS_TABLE and TASKS_GROUPS which are then imported by LightEval.
 
@@ -31,12 +31,12 @@ Author:
 import numpy as np
 from aenum import extend_enum
 
-from easy_eval.metrics import Metrics
-from easy_eval.metrics.metrics import SampleLevelMetric
-from easy_eval.metrics.utils import MetricCategory, MetricUseCase
-from easy_eval.tasks.lighteval_task import LightevalTaskConfig
-from easy_eval.tasks.requests import Doc
-from easy_eval.tasks.tasks_prompt_formatting import LETTER_INDICES
+from indic_eval.metrics import Metrics
+from indic_eval.metrics.metrics import SampleLevelMetric
+from indic_eval.metrics.utils import MetricCategory, MetricUseCase
+from indic_eval.tasks.lighteval_task import LightevalTaskConfig
+from indic_eval.tasks.requests import Doc
+from indic_eval.tasks.tasks_prompt_formatting import LETTER_INDICES
 
 
 # EVAL WITH NO SUBSET ##
@@ -44,7 +44,7 @@ from easy_eval.tasks.tasks_prompt_formatting import LETTER_INDICES
 # attached to it, and one evaluation possible.
 task = LightevalTaskConfig(
     name="myothertask",
-    prompt_function="prompt_fn",  # must be defined in the file or imported from src/easy_eval/tasks/tasks_prompt_formatting.py
+    prompt_function="prompt_fn",  # must be defined in the file or imported from src/indic_eval/tasks/tasks_prompt_formatting.py
     suite=["community"],
     hf_repo="",
     hf_subset="default",
@@ -92,7 +92,7 @@ class CustomSubsetTask(LightevalTaskConfig):
 # Define as many as you need for your different tasks
 def prompt_fn(line, task_name: str = None):
     """Defines how to go from a dataset line to a doc object.
-    Follow examples in src/easy_eval/tasks/tasks_prompt_formatting.py, or get more info
+    Follow examples in src/indic_eval/tasks/tasks_prompt_formatting.py, or get more info
     about what this function should do in the README.
     """
     return Doc(
@@ -123,7 +123,7 @@ extend_enum(Metrics, "my_custom_metric_name", custom_metric)
 
 # MODULE LOGIC
 # You should not need to touch this
-# Convert to dict for easy_eval
+# Convert to dict for indic_eval
 TASKS_TABLE = [task.as_dict() for task in _TASKS]
 
 if __name__ == "__main__":
