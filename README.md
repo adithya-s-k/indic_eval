@@ -353,7 +353,7 @@ python3 -m build .
 
 ## How to navigate this project
 `indic_eval` is supposed to be used as a standalone evaluation library.
-- To run the evaluations, you can use `run_evals_accelerate.py` or `run_evals_nanotron.py`.
+- To run the evaluations, you can use `run_indic_evals_accelerate`,`run_evals_accelerate.py` or `run_evals_nanotron.py`.
 - [src/indic_eval](https://github.com/adithya-s-k/indic_eval/tree/main/src/indic_eval) contains the core of the lib itself
     - [indic_eval](https://github.com/adithya-s-k/indic_eval/tree/main/src/indic_eval) contains the core of the library, divided in the following section
         - [main_accelerate.py](https://github.com/adithya-s-k/indic_eval/blob/main/src/indic_eval/main_accelerate.py) and [main_nanotron.py](https://github.com/adithya-s-k/indic_eval/blob/main/src/indic_eval/main_nanotron.py) are our entry points to run evaluation
@@ -381,7 +381,7 @@ Prompt function: **find a suitable prompt function** in `src.indic_eval.tasks.ta
 
 Summary: create a **line summary** of your evaluation, in `src/indic_eval/tasks/tasks_table.jsonl`. This summary should contain the following fields:
 - `name` (str), your evaluation name
-- `suite` (list), the suite(s) to which your evaluation should belong. This field allows us to compare different tasks implementation, and is used a task selection to differentiate the versions to launch. At the moment, you'll find the keywords ["indic_eval","helm", "bigbench", "original", "lighteval", "community", "custom"]; for core evals, please choose `lighteval`.
+- `suite` (list), the suite(s) to which your evaluation should belong. This field allows us to compare different tasks implementation, and is used a task selection to differentiate the versions to launch. At the moment, you'll find the keywords ["indic_eval","helm", "bigbench", "original", "lighteval", "community", "custom"]; for indic evals, please choose `indic_eval` 
 - `prompt_function` (str), the name of the prompt function you defined in the step above
 - `hf_repo` (str), the path to your evaluation dataset on the hub
 - `hf_subset` (str), the specific subset you want to use for your evaluation (note: when the dataset has no subset, fill this field with `"default"`, not with `None` or `""`)
@@ -501,6 +501,26 @@ These metrics need the model to generate an output. They are therefore slower.
     - `quasi_exact_match_gsm8k` (Harness): Fraction of instances where the normalized prediction matches the normalized gold (normalization done for gsm8k, where latex symbols, units, etc are removed)
 
 ## Acknowledgement
-This evaluation library builds on top of [lighteval](https://github.com/huggingface/lighteval) which was originally built on top of the great [Eleuther AI Harness](https://github.com/EleutherAI/lm-evaluation-harness) (which to powers the [Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard)). 
+
+This evaluation library is built on top of [lighteval](https://github.com/huggingface/lighteval), which itself leverages the excellent [Eleuther AI Harness](https://github.com/EleutherAI/lm-evaluation-harness). The framework also powers the [Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard).
 
 ## Contribute
+
+### Testing and Feedback
+We welcome contributions from the community to help test and improve this library. If you encounter any issues or have suggestions for enhancements, please feel free to open an issue on the GitHub repository [here](https://github.com/adithya-s-k/indic_eval).
+
+### Star History
+You can track the repository's star history and show your support by giving it a star on GitHub:
+
+![Star History](https://api.star-history.com/svg?repos=adithya-s-k/indic_eval&type=Date)
+
+Your stars help us to gauge interest and prioritize development efforts.
+
+### Pull Requests
+If you'd like to contribute directly to the codebase, please fork the repository, make your changes, and submit a pull request. We appreciate all contributions!
+
+### Documentation
+Improvements to documentation are always valuable. If you find areas where the documentation could be clearer or more comprehensive, please consider submitting a pull request with your proposed changes.
+
+### Spread the Word
+Help us spread the word about this evaluation library! Share it with your colleagues and networks who might find it useful. Your support is essential in growing the community around this project.
