@@ -193,3 +193,5 @@ prod_env
 logs
 _logs
 outputs
+
+/indic-eval-venv
