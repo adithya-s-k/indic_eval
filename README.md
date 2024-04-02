@@ -1,31 +1,36 @@
-# LightEval 🌤️
+# IndicEval 
 
-A lightweight framework for LLM evaluation
+A lightweight evaluation suite tailored specifically for assessing Indic LLMs across a diverse range of tasks, aiding in performance assessment and comparison within the Indian language context
 
 ## Context
-LightEval is a lightweight LLM evaluation suite that Hugging Face has been using internally with the recently released LLM data processing library [datatrove](https://github.com/huggingface/datatrove) and LLM training library [nanotron](https://github.com/huggingface/nanotron).
 
-We're releasing it with the community in the spirit of building in the open.
+Indic Eval is a lightweight LLM evaluation suite built on top of [LightEval](https://github.com/huggingface/lighteval), which Hugging Face has been using internally. We at [cognitivelab.in](https://cognitivelab.in) utilize it for internal testing of LLMs on various tasks. 
 
-Note that it is still very much early so don't expect 100% stability ^^'
-In case of problems or question, feel free to open an issue!
+While early in development, it offers a collaborative space for community-driven advancement in Indic language modeling. Please note that stability is a work in progress. Feel free to contribute or raise issues!
+
+## What does it Offer on top of Light eval
+- ✅ Intergration with Indic LLM leaderboard 
+- ✅ Support of the following tranlsted dataset ARC, Hellaswag , Boolq, MMLU , Winogrande to indian languages
+- ✅ Skypilot Integration to run Evals on 15+ CLoud providers with simple configuration
+- ✅ Support for Langugage Base evaluation rather than task based
+
 
 ## News
-- **Feb 08, 2024**: Release of `lighteval`
+- **April 01, 2024**: Release of `indic_eval`
 
 ## Installation
 
 Clone the repo:
 
 ```bash
-git clone https://github.com/huggingface/lighteval.git
-cd lighteval
+git clone https://github.com/adithya-s-k/indic_eval
+cd indic_eval
 ```
 
 Create a virtual environment using virtualenv or conda depending on your preferences. We require Python 3.10 or above:
 
 ```bash
-conda create -n lighteval python=3.10 && conda activate lighteval
+conda create -n indic-eval-venv python=3.10 && conda activate indic-eval-venv
 ```
 
 Install the dependencies. For the default installation, you just need:
@@ -54,7 +59,17 @@ huggingface-cli login
 
 and pasting your access token.
 
-### Optional steps
+## Run Indic LLM Leaderboard Eval
+```bash
+accelerate launch run_indic_evals_accelerate.py \
+    --model_args="pretrained=<path to model on the hub>" \
+    --tasks indic_llm_leadeboard \
+    --output_dir output_dir \
+    --push_to_leaderboard <yourname@company.com> \
+```
+
+<details>
+<summary><h2>Optional steps</h2></summary>
 
 - to load and push big models/datasets, your machine likely needs Git LFS. You can install it with `sudo apt-get install git-lfs`
 - If you want to run bigbench evaluations, install bigbench `pip install "bigbench@https://storage.googleapis.com/public_research_data/bigbench/bigbench-0.0.1.tar.gz"`
@@ -424,3 +439,4 @@ srun accelerate launch --multi_gpu --num_processes=8 run_evals_accelerate.py --m
 pip install build
 python3 -m build .
 ```
+</details>
