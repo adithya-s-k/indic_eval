@@ -1,0 +1,47 @@
+# ARC-easy
+indiceval|ARC-Easy:hindi|5|0
+indiceval|ARC-Easy:kannada|5|0
+indiceval|ARC-Easy:tamil|5|0
+indiceval|ARC-Easy:telugu|5|0
+indiceval|ARC-Easy:gujarati|5|0
+indiceval|ARC-Easy:marathi|5|0
+indiceval|ARC-Easy:malayalam|5|0
+
+# ARC-Challenge
+indiceval|ARC-Challenge:hindi|10|0
+indiceval|ARC-Challenge:kannada|10|0
+indiceval|ARC-Challenge:tamil|10|0
+indiceval|ARC-Challenge:telugu|10|0
+indiceval|ARC-Challenge:gujarati|10|0
+indiceval|ARC-Challenge:marathi|10|0
+indiceval|ARC-Challenge:malayalam|10|0
+
+# HellaSwag
+indiceval|Hellaswag:hindi|5|0
+indiceval|Hellaswag:kannada|5|0
+indiceval|Hellaswag:tamil|5|0
+indiceval|Hellaswag:telugu|5|0
+indiceval|Hellaswag:gujarati|5|0
+indiceval|Hellaswag:marathi|5|0
+indiceval|Hellaswag:malayalam|5|0
+
+# Boolq
+indiceval|Boolq:hindi|5|0
+indiceval|Boolq:kannada|5|0
+indiceval|Boolq:tamil|5|0
+indiceval|Boolq:telugu|5|0
+indiceval|Boolq:gujarati|5|0
+indiceval|Boolq:marathi|5|0
+indiceval|Boolq:malayalam|5|0
+
+# MMLU
+
+indiceval|MMLU:hindi|5|0
+indiceval|MMLU:kannada|5|0
+indiceval|MMLU:tamil|5|0
+indiceval|MMLU:telugu|5|0
+indiceval|MMLU:gujarati|5|0
+indiceval|MMLU:marathi|5|0
+indiceval|MMLU:malayalam|5|0
+
+
