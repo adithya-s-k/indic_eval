@@ -60,7 +60,7 @@ def main(args):
     env_config = EnvConfig(token=TOKEN, cache_dir=args.cache_dir)
     evaluation_tracker = EvaluationTracker(hub_results_org=args.results_org, token=TOKEN)
     evaluation_tracker.general_config_logger.log_args_info(
-        args.num_fewshot_seeds, args.override_batch_size, args.max_samples, args.job_id
+        args.num_fewshot_seeds, args.override_batch_size, args.max_samples, args.job_id, args.language
     )
 
     if args.max_samples:
