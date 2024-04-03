@@ -34,7 +34,7 @@ from datasets import Dataset, load_dataset
 from datasets.utils.metadata import MetadataConfigs
 from huggingface_hub import DatasetCard, DatasetCardData, HfApi, HFSummaryWriter, hf_hub_url
 
-from indic_eval.logging.hierarchical_logger import hlog, hlog_warn
+from indic_eval.logging.hierarchical_logger import hlog, hlog_warn, hlog_err
 from indic_eval.logging.info_loggers import (
     DetailsLogger,
     GeneralConfigLogger,
@@ -467,7 +467,7 @@ class EvaluationTracker:
         new_dictionary.update(results_dict)
         results_string = json.dumps(new_dictionary, indent=4)
 
-        # If we are pushing to the Oppen LLM Leaderboard, we'll store specific data in the model card.
+        # If we are pushing to the Open LLM Leaderboard, we'll store specific data in the model card.
         is_open_llm_leaderboard = repo_id.split("/")[0] == "open-llm-leaderboard"
         if is_open_llm_leaderboard:
             org_string = (
@@ -603,18 +603,15 @@ class EvaluationTracker:
         try:
             # Convert final_dict to JSON
             json_data = json.dumps(final_dict)
-            
             # Set headers
             headers = {'Content-Type': 'application/json'}
-
             # Send POST request to the endpoint
             response = requests.post(url, data=json_data, headers=headers)
-
             # Check the response
             if response.status_code == 200:
-                print("JSON file uploaded successfully")
+                hlog("Results uploaded successfully to Indic LLM Leaderboard : https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard ")
             else:
-                print("Failed to upload JSON file:", response.text)
+                hlog_warn("Failed to upload to Indic LLM Leaderboard")
         except Exception as e:
-            print("An error occurred:", e)
+            hlog_err("An error occurred:", e)
         
