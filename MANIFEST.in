@@ -1,1 +1,1 @@
-include src/lighteval/tasks/*.jsonl
+include src/indic_eval/tasks/*.jsonl
