@@ -25,6 +25,7 @@ import json
 import os
 import re
 import time
+import requests
 from dataclasses import asdict, is_dataclass
 from datetime import datetime
 from pathlib import Path
@@ -594,3 +595,26 @@ class EvaluationTracker:
         )
         # except Exception as e:
         #     logger.warning(f"Could not push to tensorboard\n{e}")
+    
+    def push_to_leaderboard(final_dict):
+        # Endpoint URL
+        url = ""
+
+        try:
+            # Convert final_dict to JSON
+            json_data = json.dumps(final_dict)
+            
+            # Set headers
+            headers = {'Content-Type': 'application/json'}
+
+            # Send POST request to the endpoint
+            response = requests.post(url, data=json_data, headers=headers)
+
+            # Check the response
+            if response.status_code == 200:
+                print("JSON file uploaded successfully")
+            else:
+                print("Failed to upload JSON file:", response.text)
+        except Exception as e:
+            print("An error occurred:", e)
+        
