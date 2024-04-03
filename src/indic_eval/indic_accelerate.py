@@ -35,7 +35,7 @@ from indic_eval.models.model_config import EnvConfig, create_model_config
 from indic_eval.models.model_loader import load_model
 from indic_eval.tasks.lighteval_task import LightevalTask, create_requests_from_tasks
 from indic_eval.tasks.registry import Registry, taskinfo_selector
-from indic_eval.utils import is_accelerate_available, is_tgi_available, is_valid_email, print_indic_eval_text_art
+from indic_eval.utils import is_accelerate_available, is_tgi_available, is_valid_email, print_indic_eval_text_art , push_to_leaderboard
 from indic_eval.utils_parallelism import test_all_gather
 
 
@@ -153,7 +153,7 @@ def main(args):
             evaluation_tracker.details_logger.aggregate()
 
             if args.output_dir:
-                evaluation_tracker.save(
+                upload_results = evaluation_tracker.save(
                     args.output_dir, args.push_results_to_hub,args.push_details_to_hub, args.public_run, args.push_to_leaderboard , args.language
                 )
 
@@ -173,7 +173,7 @@ def main(args):
         with htrack_block("Uploading results to Indic LLM Leaderboard"):
             if args.push_to_leaderboard:
                 if is_valid_email(args.push_to_leaderboard):
-                    evaluation_tracker.push_to_leaderboard(final_dict)
+                    push_to_leaderboard(upload_results)
                 else:
                     raise ValueError("The email you have specified for --push_to_leaderboard is not valid")
             

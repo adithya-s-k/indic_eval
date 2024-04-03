@@ -12,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import re
+import requests
 import importlib
 from art import text2art
+from indic_eval.logging.hierarchical_logger import hlog, hlog_warn, htrack, htrack_block, hlog_important
 from dataclasses import asdict, is_dataclass
 from typing import Any, Union
 
@@ -213,6 +215,24 @@ def print_indic_eval_text_art(suffix=None):
     ascii_art = text2art(ascii_text, font=font)
     print("\n")
     print(ascii_art)
+    
+def push_to_leaderboard(final_dict):
+    # Endpoint URL
+    url = "https://indic-leaderboard-server.wittygrass-7a3c6c5d.eastus.azurecontainerapps.io/upload_results/"
+
+    try:
+        # # Set headers
+        # headers = {'Content-Type': 'application/json'}
+        # Send POST request to the endpoint
+        # response = requests.post(url, json=final_dict, headers=headers)
+        response = requests.post(url, json=final_dict)
+        # Check the response
+        if response.status_code == 200:
+            hlog_important("Results uploaded successfully to Indic LLM Leaderboard : https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard ")
+        else:
+            hlog_warn("Failed to upload to Indic LLM Leaderboard")
+    except Exception as e:
+        hlog_warn("An error occurred:", e)
 
 
 

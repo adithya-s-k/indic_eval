@@ -211,6 +211,7 @@ class EvaluationTracker:
         # except Exception as e:
         #     hlog("WARNING: Could not save results")
         #     hlog(repr(e))
+        return dumped
 
     def generate_final_dict(self) -> dict:
         """Aggregates and returns all the logger's experiment information in a dictionary.
