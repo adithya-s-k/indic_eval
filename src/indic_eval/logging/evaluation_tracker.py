@@ -34,7 +34,7 @@ from datasets import Dataset, load_dataset
 from datasets.utils.metadata import MetadataConfigs
 from huggingface_hub import DatasetCard, DatasetCardData, HfApi, HFSummaryWriter, hf_hub_url
 
-from indic_eval.logging.hierarchical_logger import hlog, hlog_warn, hlog_err
+from indic_eval.logging.hierarchical_logger import hlog, hlog_warn, hlog_err, hlog_important
 from indic_eval.logging.info_loggers import (
     DetailsLogger,
     GeneralConfigLogger,
@@ -600,16 +600,17 @@ class EvaluationTracker:
     
     def push_to_leaderboard(final_dict):
         # Endpoint URL
-        url = ""
+        url = "https://indic-leaderboard-server.wittygrass-7a3c6c5d.eastus.azurecontainerapps.io/upload_results/"
 
         try:
-            # Set headers
-            headers = {'Content-Type': 'application/json'}
+            # # Set headers
+            # headers = {'Content-Type': 'application/json'}
             # Send POST request to the endpoint
-            response = requests.post(url, json=final_dict, headers=headers)
+            # response = requests.post(url, json=final_dict, headers=headers)
+            response = requests.post(url, json=final_dict)
             # Check the response
             if response.status_code == 200:
-                hlog("Results uploaded successfully to Indic LLM Leaderboard : https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard ")
+                hlog_important("Results uploaded successfully to Indic LLM Leaderboard : https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard ")
             else:
                 hlog_warn("Failed to upload to Indic LLM Leaderboard")
         except Exception as e:
