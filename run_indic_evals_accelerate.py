@@ -113,7 +113,7 @@ def get_parser():
         default=None,
         help="Id of a task, e.g. 'original|mmlu:abstract_algebra|5' or path to a texte file with a list of tasks",
     )
-    group.add_argument(
+    parser.add_argument(
         "--language",
         required=True,
         type=str,
