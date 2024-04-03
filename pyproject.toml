@@ -50,6 +50,7 @@ keywords = ["evaluation", "nlp", "llm"]
 dependencies = [
     # Base dependencies
     "art==6.1",
+    "requests"
     "transformers>=4.38.0",
     "huggingface_hub>=0.22.0",
     "torch>=2.0",
