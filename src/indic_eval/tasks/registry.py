@@ -59,7 +59,7 @@ DEFAULT_SUITES = [
 TRUNCATE_FEW_SHOTS_DEFAULTS = True
 
 TABLE_PATH = os.path.join(os.path.dirname(__file__), "tasks_table.jsonl")
-INDIC_TABLE_PATH = os.path.join(os.path.dirname(__file__), "indic_tasks_table.jsonl")
+# INDIC_TABLE_PATH = os.path.join(os.path.dirname(__file__), "indic_tasks_table.jsonl")
 
 
 class Registry:
@@ -260,8 +260,8 @@ def create_config_tasks(
 
     if meta_table is None:
         meta_table = Dataset.from_json(TABLE_PATH)
-        indic_meta_table = Dataset.from_json(INDIC_TABLE_PATH)
-        meta_table = concatenate_datasets([indic_meta_table, meta_table])
+        # indic_meta_table = Dataset.from_json(INDIC_TABLE_PATH)
+        # meta_table = concatenate_datasets([indic_meta_table, meta_table])
 
     tasks_with_config = {}
     # Every task is renamed suite|task, if the suite is in DEFAULT_SUITE
