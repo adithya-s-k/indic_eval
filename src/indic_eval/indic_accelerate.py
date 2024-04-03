@@ -88,11 +88,11 @@ def main(args):
         with accelerator.main_process_first() if accelerator is not None else nullcontext():
             if args.tasks == "indic_llm_leadeboard":
                 if is_valid_email(args.push_to_leaderboard):
-                    hlog(f"{args.push_to_leaderboard} is the email id through which we will contact you for verification")
+                    hlog_important(f"{args.push_to_leaderboard} is the email id through which we will contact you for verification")
                 else:
                     raise ValueError("The email you have specified for --push_to_leaderboard is not valid")      
                 if args.language in ["kannada", "hindi", "tamil", "telugu", "gujarati", "marathi", "malayalam","english"]:
-                    hlog(f"{args.language} langauge selected")
+                    hlog_important(f"{args.language} langauge selected")
                     # args.tasks = f"indiceval|ARC-Easy:{args.language}|5|0,indiceval|ARC-Challenge:{args.language}|10|0,indiceval|Hellaswag:{args.language}|5|0,indiceval|Boolq:{args.language}|5|0,indiceval|MMLU:{args.language}|5|0"
                     args.tasks = ",".join(f"indiceval|{benchmark}:{args.language}|1|0" for benchmark in ["ARC-Easy", "ARC-Challenge", "Hellaswag", "Boolq", "MMLU"])
                     task_names_list, few_shots_dict = taskinfo_selector(args.tasks)
