@@ -388,6 +388,9 @@ class BaseModel(LightevalModel):
                 max_context_continuation_size_allowed = min(
                     longest_context_continuation_size_in_split, self.max_length
                 )
+            
+            hlog_warn("Fetching the largest batch size as it was not specified. You can determine the largest batch size --override_batch_size")
+            
             batch_size = self._get_batch_size(
                 override_bs=override_bs,
                 max_input_length=max_context_continuation_size_allowed,
@@ -596,6 +599,8 @@ class BaseModel(LightevalModel):
                     (context_enc + continuation_enc)[-(self.max_length + 1) :][:-1]
                 )
 
+            hlog_warn("Fetching the largest batch size as it was not specified. You can determine the largest batch size --override_batch_size")
+            
             batch_size = self._get_batch_size(
                 override_bs=override_bs,
                 max_input_length=max_context_continuation_size_allowed,
@@ -811,6 +816,8 @@ class BaseModel(LightevalModel):
         for split_start, split_end in tqdm(dataset.splits_start_end_iterator()):
             context_enc = dataset[0].tokenized_context
             max_context = len(context_enc[-self.max_length :])
+            
+            hlog_warn("Fetching the largest batch size as it was not specified. You can determine the largest batch size --override_batch_size")
             batch_size = self._get_batch_size(override_bs=override_bs, max_input_length=max_context)
             starting_batch_size = batch_size * 2
 
