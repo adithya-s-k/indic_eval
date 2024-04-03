@@ -1,2 +1,1 @@
 include src/lighteval/tasks/tasks_table.jsonl
-include src/lighteval/tasks/indic_tasks_table.jsonl
