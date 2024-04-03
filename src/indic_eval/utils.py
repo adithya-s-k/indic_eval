@@ -11,7 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import re
 import importlib
+from art import text2art
 from dataclasses import asdict, is_dataclass
 from typing import Any, Union
 
@@ -197,6 +199,25 @@ def can_load_extended_tasks() -> bool:
         imports.append(importlib.util.find_spec(package))
 
     return all(cur_import is not None for cur_import in imports)
+
+def is_valid_email(email):
+    # Regular expression pattern for email validation
+    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(email_pattern, email)
+
+def print_indic_eval_text_art(suffix=None):
+    font = "nancyj"
+    ascii_text = "  indic-eval"
+    if suffix:
+        ascii_text += f"  x  {suffix}"
+    ascii_art = text2art(ascii_text, font=font)
+    print("\n\n")
+    print(ascii_art)
+    
+    # Additional content
+    print("\n\nBuilt by Adithya S K : https://twitter.com/adithya_s_k")
+    print("Built on top of light eval : https://github.com/huggingface/lighteval")
+
 
 
 CANNOT_USE_EXTENDED_TASKS_MSG = "If you want to use extended_tasks, make sure you installed their dependencies using `pip install -e .[extended_tasks]`."
