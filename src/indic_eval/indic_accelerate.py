@@ -91,6 +91,7 @@ def main(args):
                     hlog(f"{args.language} langauge selected")
                     # args.tasks = f"indiceval|ARC-Easy:{args.language}|5|0,indiceval|ARC-Challenge:{args.language}|10|0,indiceval|Hellaswag:{args.language}|5|0,indiceval|Boolq:{args.language}|5|0,indiceval|MMLU:{args.language}|5|0"
                     args.tasks = ",".join(f"indiceval|{benchmark}:{args.language}|5|0" for benchmark in ["ARC-Easy", "ARC-Challenge", "Hellaswag", "Boolq", "MMLU"])
+                    task_names_list, few_shots_dict = taskinfo_selector(args.tasks)
                 else:
                     raise ValueError(f"Invalid language: {args.language}. Supported languages are kannada, hindi, tamil, telugu, gujarati, marathi, and malayalam.")
                 
@@ -146,8 +147,6 @@ def main(args):
 
             final_dict = evaluation_tracker.generate_final_dict()
             
-        
-
         with htrack_block("Cleaninp up"):
             if args.delta_weights:
                 tmp_weights_dir = f"{evaluation_tracker.general_config_logger.model_name}-delta-applied"
