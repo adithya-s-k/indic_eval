@@ -30,12 +30,12 @@ import numpy as np
 
 from indic_eval.evaluator import evaluate, make_results_table
 from indic_eval.logging.evaluation_tracker import EvaluationTracker
-from indic_eval.logging.hierarchical_logger import hlog, hlog_warn, htrack, htrack_block
+from indic_eval.logging.hierarchical_logger import hlog, hlog_warn, htrack, htrack_block,hlog_important
 from indic_eval.models.model_config import EnvConfig, create_model_config
 from indic_eval.models.model_loader import load_model
 from indic_eval.tasks.lighteval_task import LightevalTask, create_requests_from_tasks
 from indic_eval.tasks.registry import Registry, taskinfo_selector
-from indic_eval.utils import is_accelerate_available, is_tgi_available
+from indic_eval.utils import is_accelerate_available, is_tgi_available,print_indic_eval_text_art
 from indic_eval.utils_parallelism import test_all_gather
 
 
@@ -65,6 +65,11 @@ def main(args):
         hlog(
             "WARNING: --max_samples WAS SET. THESE NUMBERS ARE ONLY PARTIAL AND SHOULD NOT BE USED FOR COMPARISON UNLESS YOU KNOW WHAT YOU ARE DOING."
         )
+    
+    with htrack_block("Starting evaluation"):
+        print_indic_eval_text_art()
+        hlog_important("Created by Adithya S K : https://twitter.com/adithya_s_k on top of light eval : https://github.com/huggingface/lighteval")
+        
 
     with htrack_block("Test all gather"):
         test_all_gather(accelerator)

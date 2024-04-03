@@ -211,12 +211,9 @@ def print_indic_eval_text_art(suffix=None):
     if suffix:
         ascii_text += f"  x  {suffix}"
     ascii_art = text2art(ascii_text, font=font)
-    print("\n\n")
+    print("\n")
     print(ascii_art)
-    
-    # Additional content
-    print("\n\nBuilt by Adithya S K : https://twitter.com/adithya_s_k")
-    print("Built on top of light eval : https://github.com/huggingface/lighteval")
+
 
 
 
