@@ -118,7 +118,7 @@ def get_parser():
         required=True,
         type=str,
         default=None,
-        help="specify the language you want to run the eval for available : kannada, hindi, tamil, telugu, gujarati, marathi, malayala ",
+        help="specify the language you want to run the eval for available : kannada, hindi, tamil, telugu, gujarati, marathi, malayalam , english ",
     )
     return parser
 
