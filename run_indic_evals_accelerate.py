@@ -26,7 +26,8 @@ accelerate launch run_evals_accelerate.py --tasks="leaderboard|hellaswag|5|1" --
 """
 import argparse
 
-from indic_eval.main_accelerate import CACHE_DIR, main
+# from indic_eval.main_accelerate import CACHE_DIR, main
+from indic_eval.indic_accelerate import CACHE_DIR, main
 
 
 def get_parser():
@@ -85,6 +86,7 @@ def get_parser():
     parser.add_argument("--push_results_to_hub", default=False, action="store_true")
     parser.add_argument("--save_details", action="store_true")
     parser.add_argument("--push_details_to_hub", default=False, action="store_true")
+    parser.add_argument("--push_to_leaderboard", required=False)
     parser.add_argument(
         "--public_run", default=False, action="store_true", help="Push results and details to a public repo"
     )
@@ -118,7 +120,6 @@ def get_parser():
         default=None,
         help="specify the language you want to run the eval for available : kannada, hindi, tamil, telugu, gujarati, marathi, malayala ",
     )
-    parser.add_argument("--push_to_leaderboard", required=False)
     return parser
 
 
