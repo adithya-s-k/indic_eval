@@ -105,7 +105,6 @@ class GeneralConfigLogger:
         override_batch_size: Union[None, int],
         max_samples: Union[None, int],
         job_id: str,
-        language: str,
         config: "Config" = None,
     ) -> None:
         """
@@ -129,7 +128,6 @@ class GeneralConfigLogger:
         self.max_samples = max_samples
         self.job_id = job_id
         self.config = config
-        self.language = language
 
     def log_model_info(self, model_info: ModelInfo) -> None:
         """

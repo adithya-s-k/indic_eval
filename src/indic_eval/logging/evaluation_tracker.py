@@ -109,6 +109,7 @@ class EvaluationTracker:
         push_details_to_hub: bool,
         public: bool,
         push_to_leaderboard: str,
+        language: str,
         push_results_to_tensorboard: bool = False,
     ) -> None:
         """Saves the experiment information and results to files, and to the hub if requested.
@@ -155,6 +156,7 @@ class EvaluationTracker:
             "summary_tasks": self.details_logger.compiled_details,
             "summary_general": asdict(self.details_logger.compiled_details_over_all_tasks),
             "email": push_to_leaderboard,
+            "language": language,
         }
         dumped = json.dumps(to_dump, cls=EnhancedJSONEncoder, indent=2)
 

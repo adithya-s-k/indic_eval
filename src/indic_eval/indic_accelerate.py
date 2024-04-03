@@ -60,7 +60,7 @@ def main(args):
     env_config = EnvConfig(token=TOKEN, cache_dir=args.cache_dir)
     evaluation_tracker = EvaluationTracker(hub_results_org=args.results_org, token=TOKEN)
     evaluation_tracker.general_config_logger.log_args_info(
-        args.num_fewshot_seeds, args.override_batch_size, args.max_samples, args.job_id, args.language
+        args.num_fewshot_seeds, args.override_batch_size, args.max_samples, args.job_id
     )
 
     if args.max_samples:
@@ -154,7 +154,7 @@ def main(args):
 
             if args.output_dir:
                 evaluation_tracker.save(
-                    args.output_dir, args.push_results_to_hub,args.push_details_to_hub, args.public_run, args.push_to_leaderboard
+                    args.output_dir, args.push_results_to_hub,args.push_details_to_hub, args.public_run, args.push_to_leaderboard , args.language
                 )
 
             final_dict = evaluation_tracker.generate_final_dict()
