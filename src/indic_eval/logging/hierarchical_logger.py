@@ -93,6 +93,13 @@ def hlog_warn(x: Any) -> None:
     Logs a string version of x, which will appear in a yellow color, through the singleton [`HierarchicalLogger`].
     """
     HIERARCHICAL_LOGGER.log(Fore.YELLOW + str(x) + Style.RESET_ALL)
+    
+def hlog_important(x: Any) -> None:
+    """Importance logger.
+    
+    Logs a string version of x, which will appear in a green color, through the singleton [`HierarchicalLogger`].
+    """
+    HIERARCHICAL_LOGGER.log(Fore.GREEN + str(x) + Style.RESET_ALL)
 
 
 def hlog_err(x: Any) -> None:
