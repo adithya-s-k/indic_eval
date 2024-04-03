@@ -170,6 +170,9 @@ def main(args):
                 shutil.rmtree(tmp_weights_dir)
 
         print(make_results_table(final_dict))
+        
+        print(upload_results)
+        
         with htrack_block("Uploading results to Indic LLM Leaderboard"):
             if args.push_to_leaderboard:
                 if is_valid_email(args.push_to_leaderboard):

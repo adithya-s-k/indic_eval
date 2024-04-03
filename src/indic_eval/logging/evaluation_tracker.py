@@ -600,22 +600,3 @@ class EvaluationTracker:
         )
         # except Exception as e:
         #     logger.warning(f"Could not push to tensorboard\n{e}")
-    
-    def push_to_leaderboard(final_dict):
-        # Endpoint URL
-        url = "https://indic-leaderboard-server.wittygrass-7a3c6c5d.eastus.azurecontainerapps.io/upload_results/"
-
-        try:
-            # # Set headers
-            # headers = {'Content-Type': 'application/json'}
-            # Send POST request to the endpoint
-            # response = requests.post(url, json=final_dict, headers=headers)
-            response = requests.post(url, json=final_dict)
-            # Check the response
-            if response.status_code == 200:
-                hlog_important("Results uploaded successfully to Indic LLM Leaderboard : https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard ")
-            else:
-                hlog_warn("Failed to upload to Indic LLM Leaderboard")
-        except Exception as e:
-            hlog_err("An error occurred:", e)
-        
