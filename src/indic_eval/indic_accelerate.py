@@ -39,6 +39,8 @@ from indic_eval.utils import is_accelerate_available, is_tgi_available, is_valid
 from indic_eval.utils_parallelism import test_all_gather
 
 
+
+
 if not is_accelerate_available() and not is_tgi_available():
     hlog_warn("Using either accelerate or text-generation to run this script is advised.")
 
