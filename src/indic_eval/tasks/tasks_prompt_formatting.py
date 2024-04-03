@@ -1663,6 +1663,25 @@ def mmlu_helm(line, task_name: str = None):
         target_for_fewshot_sorting=line["choices"][gold_ix],  # specific to HELM evals
     )
 
+def mmlu_helm_indic (line, task_name: str = None):
+    # subject = line["subject"]
+    # query = f"The following are multiple choice questions (with answers) about {subject.replace('_', ' ')}.\n\nQuestion: {line['question']}"
+    query = f"The following are multiple choice questions (with answers) \n\nQuestion: {line['translated_question']}"
+    query += "".join([f"\n{key}. {choice}" for key, choice in zip(LETTER_INDICES, line["translated_choices"])])
+    query += "\nAnswer:"
+
+    gold_ix = LETTER_INDICES.index(line["answer"]) if isinstance(line["answer"], str) else line["answer"]
+
+    return Doc(
+        task_name=task_name,
+        query=query,
+        choices=[" A", " B", " C", " D"],
+        gold_index=gold_ix,
+        # instruction=f"The following are multiple choice questions (with answers) about {subject.replace('_', ' ')}.\n\n",
+        instruction=f"The following are multiple choice questions (with answers) \n\n",
+        target_for_fewshot_sorting=line["translated_choices"][gold_ix],  # specific to HELM evals
+    )
+
 
 def mmlu_qa_abstract_algebra(line, task_name: str = None):
     return mmlu_qa(line, "abstract_algebra", task_name)
