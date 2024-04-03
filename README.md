@@ -279,7 +279,75 @@ python run_evals_accelerate.py \
     --output_dir "./evals"
 ```
 
+## Customisation
+If your new task or metric has requirements, add a specific `requirements.txt` file with your evaluation.
 
+### Adding a new task
+To add a new task, first either open an issue, to determine whether it will be integrated in the core evaluations of indic_eval, in the extended tasks, or in the community tasks, and **add its dataset** on the hub.
+
+- Core evaluations are evaluation which only require standard logic in their metrics and processing, and that we will add to our test suite to ensure non regression through time. They already see a high usage in the community.
+- Extended evaluations are evaluations which require custom logic in their metrics (complex normalisation, an LLM as a judge, ...), that we added to facilitate the life of users. They already see a high usage in the community.
+- Community evaluations are submissions by the community of new tasks.
+
+A popular community evaluation can move to becoming an extended or core evaluation through time.
+
+#### Core evaluations
+Prompt function: **find a suitable prompt function** in `src.indic_eval.tasks.task_prompt_formatting.py`, or code your own. This function must output a `Doc` object, which should contain `query`, your prompt, and either `gold`, the gold output, or `choices` and `gold_index`, the list of choices and index or indices of correct answers. If your query contains an instruction which should not be repeated in a few shot setup, add it to an `instruction` field.
+
+Summary: create a **line summary** of your evaluation, in `src/indic_eval/tasks/tasks_table.jsonl`. This summary should contain the following fields:
+- `name` (str), your evaluation name
+- `suite` (list), the suite(s) to which your evaluation should belong. This field allows us to compare different tasks implementation, and is used a task selection to differentiate the versions to launch. At the moment, you'll find the keywords ["indic_eval","helm", "bigbench", "original", "lighteval", "community", "custom"]; for indic evals, please choose `indic_eval` 
+- `prompt_function` (str), the name of the prompt function you defined in the step above
+- `hf_repo` (str), the path to your evaluation dataset on the hub
+- `hf_subset` (str), the specific subset you want to use for your evaluation (note: when the dataset has no subset, fill this field with `"default"`, not with `None` or `""`)
+- `hf_avail_splits` (list), all the splits available for your dataset (train, valid or validation, test, other...)
+- `evaluation_splits` (list), the splits you want to use for evaluation
+- `few_shots_split` (str, can be `null`), the specific split from which you want to select samples for your few-shot examples. It should be different from the sets included in `evaluation_splits`
+- `few_shots_select` (str, can be `null`), the method that you will use to select items for your few-shot examples. Can be `null`, or one of:
+    - `balanced` selects examples from the `few_shots_split` with balanced labels, to avoid skewing the few shot examples (hence the model generations) towards one specific label
+    - `random` selects examples at random from the `few_shots_split`
+    - `random_sampling` selects new examples at random from the `few_shots_split` for every new item, but if a sampled item is equal to the current one, it is removed from the available samples
+    - `random_sampling_from_train` selects new examples at random from the `few_shots_split` for every new item, but if a sampled item is equal to the current one, it is kept! Only use this if you know what you are doing.
+    - `sequential` selects the first `n` examples of the `few_shots_split`
+- `generation_size` (int), the maximum number of tokens allowed for a generative evaluation. If your evaluation is a log likelihood evaluation (multi-choice), this value should be -1
+- `stop_sequence` (list), a list of strings acting as end of sentence tokens for your generation
+- `metric` (list), the metrics you want to use for your evaluation (see next section for a detailed explanation)
+- `output_regex` (str), A regex string that will be used to filter your generation. (Genrative metrics will only select tokens that are between the first and the second sequence matched by the regex. For example, for a regex matching `\n` and a generation `\nModel generation output\nSome other text` the metric will only be fed with `Model generation output`)
+- `frozen` (bool), for now is set to False, but we will steadily pass all stable tasks to True.
+- `trust_dataset` (bool), set to True if you trust the dataset.
+
+Make sure you can launch your model with your new task using `--tasks lighteval|yournewtask|2|0`.
+
+#### Community evaluations
+Copy the `community_tasks/_template.yml` to `community_tasks/yourevalname.py` and edit it to add your custom tasks (the parameters you can use are explained above). It contains an interesting mechanism if the dataset you are adding contains a lot of subsets.
+
+Make sure you can launch your model with your new task using `--tasks community|yournewtask|2|0 --custom_tasks community_tasks/yourevalname.py`.
+
+### Adding a new metric
+First check if you can use one of the parametrized functions in `src.indic_eval.metrics.metrics_corpus` or `src.indic_eval.metrics.metrics_sample`.
+
+If not, you can use the custom_task system to register your new metric:
+- create a new python file which should contain the full logic of your metric.
+- the file also needs to start with these imports
+```python
+from aenum import extend_enum
+from indic_eval.metrics import Metrics
+
+# And any other class you might need to redefine your specific metric, depending on whether it's a sample or corpus metric.
+```
+
+- and to end with the following, so that it adds your metric to our metrics list when loaded as a module.
+
+```python
+# Adds the metric to the metric list!
+extend_enum(Metrics, "metric_name", metric_function)
+if __name__ == "__main__":
+    print("Imported metric")
+```
+
+You can then give your custom metric to indic_eval by using `--custom-tasks path_to_your_file` when launching it.
+
+To see an example of a custom metric added along with a custom task, look at `tasks_examples/custom_tasks_with_custom_metrics/ifeval/ifeval.py`.
 
 
 ### Metrics for specific tasks
@@ -364,75 +432,7 @@ python3 -m build .
 - [tasks_examples](https://github.com/adithya-s-k/indic_eval/tree/main/tasks_examples) contains a list of available tasks you can launch. We advise using tasks in the `recommended_set`, as it's possible that some of the other tasks need double checking.
 - [tests](https://github.com/adithya-s-k/indic_eval/tree/main/tests) contains our test suite, that we run at each PR to prevent regressions in metrics/prompts/tasks, for a subset of important tasks.
 
-## Customisation
-If your new task or metric has requirements, add a specific `requirements.txt` file with your evaluation.
 
-### Adding a new task
-To add a new task, first either open an issue, to determine whether it will be integrated in the core evaluations of indic_eval, in the extended tasks, or in the community tasks, and **add its dataset** on the hub.
-
-- Core evaluations are evaluation which only require standard logic in their metrics and processing, and that we will add to our test suite to ensure non regression through time. They already see a high usage in the community.
-- Extended evaluations are evaluations which require custom logic in their metrics (complex normalisation, an LLM as a judge, ...), that we added to facilitate the life of users. They already see a high usage in the community.
-- Community evaluations are submissions by the community of new tasks.
-
-A popular community evaluation can move to becoming an extended or core evaluation through time.
-
-#### Core evaluations
-Prompt function: **find a suitable prompt function** in `src.indic_eval.tasks.task_prompt_formatting.py`, or code your own. This function must output a `Doc` object, which should contain `query`, your prompt, and either `gold`, the gold output, or `choices` and `gold_index`, the list of choices and index or indices of correct answers. If your query contains an instruction which should not be repeated in a few shot setup, add it to an `instruction` field.
-
-Summary: create a **line summary** of your evaluation, in `src/indic_eval/tasks/tasks_table.jsonl`. This summary should contain the following fields:
-- `name` (str), your evaluation name
-- `suite` (list), the suite(s) to which your evaluation should belong. This field allows us to compare different tasks implementation, and is used a task selection to differentiate the versions to launch. At the moment, you'll find the keywords ["indic_eval","helm", "bigbench", "original", "lighteval", "community", "custom"]; for indic evals, please choose `indic_eval` 
-- `prompt_function` (str), the name of the prompt function you defined in the step above
-- `hf_repo` (str), the path to your evaluation dataset on the hub
-- `hf_subset` (str), the specific subset you want to use for your evaluation (note: when the dataset has no subset, fill this field with `"default"`, not with `None` or `""`)
-- `hf_avail_splits` (list), all the splits available for your dataset (train, valid or validation, test, other...)
-- `evaluation_splits` (list), the splits you want to use for evaluation
-- `few_shots_split` (str, can be `null`), the specific split from which you want to select samples for your few-shot examples. It should be different from the sets included in `evaluation_splits`
-- `few_shots_select` (str, can be `null`), the method that you will use to select items for your few-shot examples. Can be `null`, or one of:
-    - `balanced` selects examples from the `few_shots_split` with balanced labels, to avoid skewing the few shot examples (hence the model generations) towards one specific label
-    - `random` selects examples at random from the `few_shots_split`
-    - `random_sampling` selects new examples at random from the `few_shots_split` for every new item, but if a sampled item is equal to the current one, it is removed from the available samples
-    - `random_sampling_from_train` selects new examples at random from the `few_shots_split` for every new item, but if a sampled item is equal to the current one, it is kept! Only use this if you know what you are doing.
-    - `sequential` selects the first `n` examples of the `few_shots_split`
-- `generation_size` (int), the maximum number of tokens allowed for a generative evaluation. If your evaluation is a log likelihood evaluation (multi-choice), this value should be -1
-- `stop_sequence` (list), a list of strings acting as end of sentence tokens for your generation
-- `metric` (list), the metrics you want to use for your evaluation (see next section for a detailed explanation)
-- `output_regex` (str), A regex string that will be used to filter your generation. (Genrative metrics will only select tokens that are between the first and the second sequence matched by the regex. For example, for a regex matching `\n` and a generation `\nModel generation output\nSome other text` the metric will only be fed with `Model generation output`)
-- `frozen` (bool), for now is set to False, but we will steadily pass all stable tasks to True.
-- `trust_dataset` (bool), set to True if you trust the dataset.
-
-Make sure you can launch your model with your new task using `--tasks lighteval|yournewtask|2|0`.
-
-#### Community evaluations
-Copy the `community_tasks/_template.yml` to `community_tasks/yourevalname.py` and edit it to add your custom tasks (the parameters you can use are explained above). It contains an interesting mechanism if the dataset you are adding contains a lot of subsets.
-
-Make sure you can launch your model with your new task using `--tasks community|yournewtask|2|0 --custom_tasks community_tasks/yourevalname.py`.
-
-### Adding a new metric
-First check if you can use one of the parametrized functions in `src.indic_eval.metrics.metrics_corpus` or `src.indic_eval.metrics.metrics_sample`.
-
-If not, you can use the custom_task system to register your new metric:
-- create a new python file which should contain the full logic of your metric.
-- the file also needs to start with these imports
-```python
-from aenum import extend_enum
-from indic_eval.metrics import Metrics
-
-# And any other class you might need to redefine your specific metric, depending on whether it's a sample or corpus metric.
-```
-
-- and to end with the following, so that it adds your metric to our metrics list when loaded as a module.
-
-```python
-# Adds the metric to the metric list!
-extend_enum(Metrics, "metric_name", metric_function)
-if __name__ == "__main__":
-    print("Imported metric")
-```
-
-You can then give your custom metric to indic_eval by using `--custom-tasks path_to_your_file` when launching it.
-
-To see an example of a custom metric added along with a custom task, look at `tasks_examples/custom_tasks_with_custom_metrics/ifeval/ifeval.py`.
 
 ## Available metrics
 ### Metrics for multiple choice tasks
