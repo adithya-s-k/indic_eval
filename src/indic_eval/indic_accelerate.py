@@ -94,7 +94,7 @@ def main(args):
                 if args.language in ["kannada", "hindi", "tamil", "telugu", "gujarati", "marathi", "malayalam","english"]:
                     hlog(f"{args.language} langauge selected")
                     # args.tasks = f"indiceval|ARC-Easy:{args.language}|5|0,indiceval|ARC-Challenge:{args.language}|10|0,indiceval|Hellaswag:{args.language}|5|0,indiceval|Boolq:{args.language}|5|0,indiceval|MMLU:{args.language}|5|0"
-                    args.tasks = ",".join(f"indiceval|{benchmark}:{args.language}|5|0" for benchmark in ["ARC-Easy", "ARC-Challenge", "Hellaswag", "Boolq", "MMLU"])
+                    args.tasks = ",".join(f"indiceval|{benchmark}:{args.language}|1|0" for benchmark in ["ARC-Easy", "ARC-Challenge", "Hellaswag", "Boolq", "MMLU"])
                     task_names_list, few_shots_dict = taskinfo_selector(args.tasks)
                 else:
                     raise ValueError(f"Invalid language: {args.language}. Supported languages are kannada, hindi, tamil, telugu, gujarati, marathi, and malayalam.")

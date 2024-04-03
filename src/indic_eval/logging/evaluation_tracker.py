@@ -601,12 +601,10 @@ class EvaluationTracker:
         url = ""
 
         try:
-            # Convert final_dict to JSON
-            json_data = json.dumps(final_dict)
             # Set headers
             headers = {'Content-Type': 'application/json'}
             # Send POST request to the endpoint
-            response = requests.post(url, data=json_data, headers=headers)
+            response = requests.post(url, json=final_dict, headers=headers)
             # Check the response
             if response.status_code == 200:
                 hlog("Results uploaded successfully to Indic LLM Leaderboard : https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard ")
