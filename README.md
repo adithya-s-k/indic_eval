@@ -60,18 +60,31 @@ and pasting your access token.
 
 ## Run Indic LLM Leaderboard Eval
 To conduct an evaluation for the Indic LLM Leaderboard, you can use the following commands:
+
 ```bash
 accelerate launch run_indic_evals_accelerate.py \
-    --model_args="pretrained=<path to model on the hub>" \
-    --language "kannada" \
+    --model_args="pretrained=<>path to model on the hub" \
+    --language <language you want to evaluate on> \
     --tasks indic_llm_leadeboard \
-    --output_dir output_dir \
+    --output_dir evals \
     --push_to_leaderboard <yourname@company.com> 
 ```
 
+- `--model_args`: Specifies the arguments for the model. This includes parameters like `pretrained`, which is the path to the model on the hub that you want to evaluate. Example: `--model_args="pretrained=path_to_model"`
+  
+- `--language`: Specifies the language you want to evaluate on. This argument determines the language-specific evaluation tasks. Example: `--language english` Langauges supported are kannada, hindi, tamil, telugu, gujarati, marathi, malayalam , english
+
+- `--tasks`: Specifies the tasks you want to evaluate the model on. In this case, it's `indic_llm_leaderboard`, indicating the evaluation tasks specific to the Indic LLM Leaderboard. which includes the following 
+
+- `--output_dir`: Specifies the directory where the evaluation results will be saved. Example: `--output_dir evals`
+
+- `--push_to_leaderboard`: Specifies the email address through which we can contact you to verify the scores if needed. Example: `--push_to_leaderboard yourname@company.com`
+
+Some other parameters include:
+
+- `--override_batch_size`: You can increase the batch size. If not specified, the library itself picks the most optimal batch size. It is recommended to leave this option out.
+
 to see all the indic benchmarks available you can refer to [indic_tasks.txt](https://github.com/adithya-s-k/indic_eval/blob/main/tasks_examples/indic_tasks.txt)
-
-
 
 ### Single Benchmark Evaluation for a Single Language
 
