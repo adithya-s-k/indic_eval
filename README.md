@@ -137,14 +137,39 @@ accelerate launch run_indic_evals_accelerate.py \
 Please make sure to replace `<path to model on the hub>` with the actual path to your pre-trained model.
 
 
+## ✈️ [SKYPILOT](https://skypilot.readthedocs.io/en/latest/docs/index.html)
+
+SkyPilot is a framework for running LLMs, AI, and batch jobs on any cloud, offering maximum cost savings, highest GPU availability, and managed execution.
+
+### Run Indic Eval through SkyPilot
+
+```bash
+pip install skypilot-nightly[all]
+```
+You can also download only for certain cloud providers. After that, authenticate the cloud provider.
+
+```bash
+sky launch -c indic-eval skypilot_indic_eval.yaml --idle-minutes-to-autostop 5
+```
+The cluster will automatically shut down after 5 minutes when it's idle.
+
+Please refer to the [documentation](https://skypilot.readthedocs.io/en/latest/docs/index.html) for more information.
+
 
 ## To-DO
-- [ ] Proper Intergration with [Indic_LLM_Leaderboard](https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard)
+- [x] Proper Intergration with [Indic_LLM_Leaderboard](https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard)
+- [x] Make Intergration with [Indic_LLM_Leaderboard](https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard) more secure
+- [x] Test out ARC-Easy for all indic Languages and see consistency
+- [x] Test out ARC-Challenge for all indic Languages and see consistency
+- [ ] Test out Hellaswag for all indic Languages and see consistency
+- [ ] Test out Boolq for all indic Languages and see consistency
+- [ ] Test out MMLU for all indic Languages and see consistency
+- [ ] Test out Translate for all indic Languages and see consistency
 - [ ] Integrate VLLM for faster evaluation
 - [ ] Test out Benchmark consistence
 
 <details>
-<summary><h3>Default Ligtheval Docs</h3></summary>
+<summary><h3>Indepth Features of Indic_eval/Ligtheval </h3></summary>
 
 - to load and push big models/datasets, your machine likely needs Git LFS. You can install it with `sudo apt-get install git-lfs`
 - If you want to run bigbench evaluations, install bigbench `pip install "bigbench@https://storage.googleapis.com/public_research_data/bigbench/bigbench-0.0.1.tar.gz"`

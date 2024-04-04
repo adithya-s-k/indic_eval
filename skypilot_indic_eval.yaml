@@ -1,0 +1,37 @@
+resources:
+  accelerators: A100-80GB
+
+
+envs:
+  MODEL_NAME: Cognitive-Lab/Ambari-7B-base-v0.1
+  LANGUAGE: kannada
+  TASKS: indiceval|ARC-Easy:kannada|5|0,indiceval|ARC-Challenge:kannada|5|0
+  EMAIL : # TODO: Replace with huggingface token
+  HF_TOKEN: # TODO: Replace with huggingface token
+
+setup: |
+  echo "Begin setup."
+
+  conda create -n indic-eval-venv python=3.10 -y && conda activate indic-eval-venv
+  git clone https://github.com/adithya-s-k/indic_eval
+  cd indic_eval
+  pip install .[accelerate,quantization,adapters]
+  pip install .[dev]
+  pre-commit install
+
+  pip install -U "huggingface_hub[cli]"
+
+  huggingface-cli login --token ${HF_TOKEN}
+  echo "Setup complete."
+
+run: |
+  conda activate indic-eval-venv
+  cd indic_eval
+  accelerate launch run_indic_evals_accelerate.py \
+      --model_args="pretrained=${MODEL_NAME}" \
+      --language ${LANGUAGE} \
+      --tasks ${TASKS} \
+      --output_dir evals \
+      --push_to_leaderboard ${EMAIL} 
+
+  echo "Evaluation complete"
