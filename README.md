@@ -1,16 +1,16 @@
-# IndicEval 
+# Indic Eval 
 
 A lightweight evaluation suite tailored specifically for assessing Indic LLMs across a diverse range of tasks, aiding in performance assessment and comparison within the Indian language context
 
-## Context
+### Context
 
 Indic Eval is a lightweight LLM evaluation suite built on top of [LightEval](https://github.com/huggingface/lighteval), which Hugging Face has been using internally. We at [cognitivelab.in](https://cognitivelab.in) utilize it for internal testing of LLMs on various tasks. 
 
 While early in development, it offers a collaborative space for community-driven advancement in Indic language modeling. Please note that stability is a work in progress. Feel free to contribute or raise issues!
 
-## What does it Offer on top of Light eval
+### What does it Offer on top of Light eval
 - ✅ Intergration with [Indic LLM leaderboard](https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard) 
-- ✅ Support of the following tranlsted dataset ARC, Hellaswag , Boolq, MMLU , Winogrande to indian languages
+- ✅ Support of the following translated dataset ARC, Hellaswag , Boolq, MMLU , Translate[IND 22] to indian languages
 - ✅ [Skypilot](https://skypilot.readthedocs.io/) Integration to run Evals on 15+ CLoud providers with simple configuration
 - ✅ Support for Language Base evaluation rather than task based
 
@@ -158,11 +158,11 @@ Please refer to the [documentation](https://skypilot.readthedocs.io/en/latest/do
 
 ## To-DO
 - [x] Proper Intergration with [Indic_LLM_Leaderboard](https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard)
-- [x] Make Intergration with [Indic_LLM_Leaderboard](https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard) more secure
 - [x] Test out ARC-Easy for all indic Languages and see consistency
 - [x] Test out ARC-Challenge for all indic Languages and see consistency
-- [ ] Test out Hellaswag for all indic Languages and see consistency
+- [x] Test out Hellaswag for all indic Languages and see consistency
 - [ ] Test out Boolq for all indic Languages and see consistency
+- [ ] Make Intergration with [Indic_LLM_Leaderboard](https://huggingface.co/spaces/Cognitive-Lab/indic_llm_leaderboard) more secure
 - [ ] Test out MMLU for all indic Languages and see consistency
 - [ ] Test out Translate for all indic Languages and see consistency
 - [ ] Integrate VLLM for faster evaluation
@@ -462,6 +462,7 @@ python3 -m build .
 - To run the evaluations, you can use `run_indic_evals_accelerate`,`run_evals_accelerate.py` or `run_evals_nanotron.py`.
 - [src/indic_eval](https://github.com/adithya-s-k/indic_eval/tree/main/src/indic_eval) contains the core of the lib itself
     - [indic_eval](https://github.com/adithya-s-k/indic_eval/tree/main/src/indic_eval) contains the core of the library, divided in the following section
+        - [indic_accelerate.py](https://github.com/adithya-s-k/indic_eval/blob/main/src/indic_eval/main_accelerate.py) is the entry point to run indic languge benchmark
         - [main_accelerate.py](https://github.com/adithya-s-k/indic_eval/blob/main/src/indic_eval/main_accelerate.py) and [main_nanotron.py](https://github.com/adithya-s-k/indic_eval/blob/main/src/indic_eval/main_nanotron.py) are our entry points to run evaluation
         - [logging](https://github.com/adithya-s-k/indic_eval/tree/main/src/indic_eval/logging): Our loggers, to display experiment information and push it to the hub after a run
         - [metrics](https://github.com/adithya-s-k/indic_eval/tree/main/src/indic_eval/metrics): All the available metrics you can use. They are described in metrics, and divided between sample metrics (applied at the sample level, such as a prediction accuracy) and corpus metrics (applied over the whole corpus). You'll also find available normalisation functions.
