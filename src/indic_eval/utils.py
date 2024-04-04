@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import re
+import json
 import requests
 import importlib
 from art import text2art
@@ -216,12 +217,29 @@ def print_indic_eval_text_art(suffix=None):
     print(ascii_art)
     
 def push_to_leaderboard(json_dump):
-    # Endpoint URL
-    url = "https://indic-leaderboard-server.wittygrass-7a3c6c5d.eastus.azurecontainerapps.io/upload_results/"
+    
+    # if you are wondering what this dude had done here 
+    # Yep, I know it's bad practice to just copy and paste an endpoint as below.
+
+    # Please don't spam or launch a DDoS attack on the server.
+    url_not_to_be_attacked_or_used_to_scam_scores = "https://indic-leaderboard-server.wittygrass-7a3c6c5d.eastus.azurecontainerapps.io/upload_results/"
+
+    # It's really hard to authenticate local packages, and it would have to be done to have an authentication login/signup page elsewhere,
+    # where you can generate an API key, and then you can access the server.
+    # I didn't have the time to implement that yet, but I will soon try to do so.
 
     try:
+        # If json_dump is a string, load it as a JSON object
+        if isinstance(json_dump, str):
+            json_data = json.loads(json_dump)
+        # If json_dump is already a dictionary, use it directly
+        elif isinstance(json_dump, dict):
+            json_data = json_dump
+        else:
+            raise ValueError("Input json_dump must be either a JSON string or a dictionary")
+
         # Send POST request to the endpoint
-        response = requests.post(url, json=json_dump)
+        response = requests.post(url_not_to_be_attacked_or_used_to_scam_scores, json=json_data)
         
         # Check the response
         if response.status_code == 200:
