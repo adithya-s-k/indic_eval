@@ -1,0 +1,37 @@
+name: Publish Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    name: Publish Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine
+
+      - name: Build Package
+        run: |
+          python -m build
+
+      - name: Publish Package to PyPI
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{secrets.PYPI_API_TOKEN}}
+        run: |
+          python -m twine upload --repository pypi dist/*
