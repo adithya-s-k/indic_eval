@@ -30,7 +30,7 @@ where = ["src"]
 
 [project]
 name = "indic_eval"
-version = "0.3.0.dev0"
+version = "0.1.0"
 authors = [
   { name="Adithya S Kolavi", email="adithyaskolavi@gmail.com" }
 ]
