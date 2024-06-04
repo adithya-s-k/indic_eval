@@ -38,6 +38,193 @@ from indic_eval.utils import as_list
 LETTER_INDICES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 # fmt: on
 
+# all prompt formatters for indic languages
+
+def get_indic_language(language_code: str):
+    "takes in a indic language code and returns the language "
+    
+    language_code_mapping = {"hi" :"hindi", 
+                                "kn" : "kannada",
+                                "ta" : "tamil",
+                                "te" : "telgu",
+                                "mr" : "marathi",
+                                "ml" : "malayalam",
+                                "gu" : "gujarati"}
+    return str(language_code_mapping[language_code])
+
+def hellaswag_harness_indic(line, task_name: str = None):
+    def preprocess(text):
+        """Comes from AiHarness"""
+        # text = text.strip()
+        # NOTE: Brackets are artifacts of the WikiHow dataset portion of HellaSwag.
+        text = text.replace(" [title]", ". ")
+        text = re.sub("\\[.*?\\]", "", text)
+        text = text.replace("  ", " ")
+        return text
+
+    # steps to get ctx_b as we didnt translate form the original dataset but merged it with the translated ending
+    choices = [preprocess(ending) for ending in line["translated_endings"]]
+    right_label = int(line["label"]) if line["label"] != "" else -1
+    ctx_b = choices[right_label]
+    ctx_b = ' '.join(ctx_b.split()[:2]) # gets the first two words from the correct option as the starting tokens
+    ctx = f"{line['translated_ctx_a']} {ctx_b}"
+    return Doc(
+        task_name=task_name,
+        query=preprocess(ctx),
+        choices=[preprocess(ending) for ending in line["translated_endings"]],
+        gold_index=int(line["label"]) if line["label"] != "" else -1,  # -1 for test
+        # "metric": "choices_loglikelihood",
+    )
+
+def crosssum_indic(line, task_name: str = None):
+    """
+    I will first show a news article in English and then provide a
+    summary of it in the [Target Language Name] language.
+    Summarize the following article: [Article]
+    Summary:    
+    """
+    language = get_indic_language(line["lang"])
+    return Doc(
+        task_name=task_name,
+        query = f"""I will first show a news article in English and then provide a
+                    summary of it in the {language} language.
+                    Summarize the following article: {line["text"]}
+                    Summary: """,
+        choices=[line["summary"]],
+        gold_index=0,
+        instruction=f"I will first show a news article in English and then provide a summary of it in the {language} language.",
+    )
+
+def flores_enxx_indic(line, task_name: str = None):
+    """
+    Translate the following:
+    To [Target Language Name]: [Sentence in English]
+    Output:
+    """
+    language = get_indic_language(line["lang"])
+    return Doc(
+        task_name=task_name,
+        query = f"""Translate the following:
+                    {line["source"]} to {language}.
+                    
+                    ### Translation: 
+                    """,
+        choices=[line["target"]],
+        gold_index=0,
+        instruction=f"Translate the following:{line["source"]} to {language}",
+    )
+
+def flores_xxen_indic(line, task_name: str = None):
+    """
+    Translate the following:
+    To English: [Sentence in Target Language]
+    Output:
+    """
+    # language = get_indic_language(line["lang"])
+    return Doc(
+        task_name=task_name,
+        query = f"""Translate the following:
+                    {line["source"]} to english.
+                    
+                    ### Translation: 
+                    """,
+        choices=[line["target"]],
+        gold_index=0,
+        instruction=f"Translate the following:{line["source"]} to english.",
+    )
+
+def xquad_indic(line, task_name: str = None):
+    
+    """
+    Given the following context:
+    
+    [Passage in Target Language]
+    Question : [Question in Target Language]
+    Answer :
+    
+    """
+    
+    language = get_indic_language(line["lang"])
+    answer = line["answers"][0]["text"]
+    return Doc(
+        task_name=task_name,
+        query = f"""Given the following context:
+                {line["context"]} 
+                
+                answer to the following 
+                Question: {line["question"]}  in {language}
+                
+                Answer : 
+                """,   
+        choices=[answer],
+        gold_index=0,
+        instruction= f"Given the following context answer to the question"
+    )
+
+def xorqa_indic(line, task_name: str = None):
+    """
+    Generate an answer in [Target Language Name] for the question
+    based on the given passage:
+    [Passage in English]
+    Question : [Question in Target Language]
+    Answer :
+    """
+    
+    language = get_indic_language(line["lang"])
+    answer = line["translated_answers"][0]["text"]
+    return Doc(
+        task_name=task_name,
+        query = f"""Generate an answer in {language} for the question
+                based on the given passage:
+                
+                {line["context"]} 
+                
+                Question: {line["oracle_question"]}
+                
+                Answer : 
+                """,   
+        choices=[answer],
+        gold_index=0,
+        instruction= f"Given the following passage answer to the question in {language}"
+    )
+
+
+def arc_indic(line, task_name: str = None):
+    return Doc(
+        task_name=task_name,
+        query=f"Question: {line['translated_question']}\nAnswer:",
+        choices=[f" {c}" for c in line["translated_choices"]["text"]],
+        gold_index=line["translated_choices"]["label"].index(line["answerKey"]),
+    )
+    
+def boolq_harness_indic(line, task_name: str = None):
+    return Doc(
+        task_name=task_name,
+        query=f"{line['translated_passage']}\nQuestion: {line['translated_question']}?\nAnswer:",
+        choices=[" no", " yes"],  # False is label 0
+        gold_index=int(line["answer"]),
+    )
+    
+def mmlu_helm_indic (line, task_name: str = None):
+    # subject = line["subject"]
+    # query = f"The following are multiple choice questions (with answers) about {subject.replace('_', ' ')}.\n\nQuestion: {line['question']}"
+    query = f"The following are multiple choice questions (with answers) \n\nQuestion: {line['translated_question']}"
+    query += "".join([f"\n{key}. {choice}" for key, choice in zip(LETTER_INDICES, line["translated_choices"])])
+    query += "\nAnswer:"
+
+    gold_ix = LETTER_INDICES.index(line["answer"]) if isinstance(line["answer"], str) else line["answer"]
+
+    return Doc(
+        task_name=task_name,
+        query=query,
+        choices=[" A", " B", " C", " D"],
+        gold_index=gold_ix,
+        # instruction=f"The following are multiple choice questions (with answers) about {subject.replace('_', ' ')}.\n\n",
+        instruction=f"The following are multiple choice questions (with answers) \n\n",
+        target_for_fewshot_sorting=line["translated_choices"][gold_ix],  # specific to HELM evals
+    )
+
+    
 
 def anli(line, task_name: str = None):
     return Doc(
@@ -76,13 +263,8 @@ def arc(line, task_name: str = None):
         gold_index=line["choices"]["label"].index(line["answerKey"]),
     )
 
-def arc_indic(line, task_name: str = None):
-    return Doc(
-        task_name=task_name,
-        query=f"Question: {line['translated_question']}\nAnswer:",
-        choices=[f" {c}" for c in line["translated_choices"]["text"]],
-        gold_index=line["translated_choices"]["label"].index(line["answerKey"]),
-    )
+
+
 
 
 def arc_with_options_letters_predict(line, task_name: str = None):
@@ -474,14 +656,7 @@ def boolq_helm_contrastset(line, task_name: str = None):
     ][0]
 
 
-def boolq_harness_indic(line, task_name: str = None):
-    return Doc(
-        task_name=task_name,
-        query=f"{line['translated_passage']}\nQuestion: {line['translated_question']}?\nAnswer:",
-        choices=[" no", " yes"],  # False is label 0
-        gold_index=int(line["answer"]),
-    )
-    
+
 def boolq_harness(line, task_name: str = None):
     return Doc(
         task_name=task_name,
@@ -581,6 +756,8 @@ def covid_dialogue(line, task_name: str = None):
         gold_index=0,
         instruction="Generate a response given a patient's questions and concerns.\n",
     )
+
+
 
 
 def crows_pair(line, task_name: str = None):
@@ -785,29 +962,6 @@ def hellaswag_harness(line, task_name: str = None):
         task_name=task_name,
         query=preprocess(line["activity_label"] + ": " + ctx),
         choices=[preprocess(ending) for ending in line["endings"]],
-        gold_index=int(line["label"]) if line["label"] != "" else -1,  # -1 for test
-        # "metric": "choices_loglikelihood",
-    )
-def hellaswag_harness_indic(line, task_name: str = None):
-    def preprocess(text):
-        """Comes from AiHarness"""
-        # text = text.strip()
-        # NOTE: Brackets are artifacts of the WikiHow dataset portion of HellaSwag.
-        text = text.replace(" [title]", ". ")
-        text = re.sub("\\[.*?\\]", "", text)
-        text = text.replace("  ", " ")
-        return text
-
-    # steps to get ctx_b as we didnt translate form the original dataset but merged it with the translated ending
-    choices = [preprocess(ending) for ending in line["translated_endings"]]
-    right_label = int(line["label"]) if line["label"] != "" else -1
-    ctx_b = choices[right_label]
-    ctx_b = ' '.join(ctx_b.split()[:2]) # gets the first two words from the correct option as the starting tokens
-    ctx = f"{line['translated_ctx_a']} {ctx_b}"
-    return Doc(
-        task_name=task_name,
-        query=preprocess(ctx),
-        choices=[preprocess(ending) for ending in line["translated_endings"]],
         gold_index=int(line["label"]) if line["label"] != "" else -1,  # -1 for test
         # "metric": "choices_loglikelihood",
     )
@@ -1663,24 +1817,6 @@ def mmlu_helm(line, task_name: str = None):
         target_for_fewshot_sorting=line["choices"][gold_ix],  # specific to HELM evals
     )
 
-def mmlu_helm_indic (line, task_name: str = None):
-    # subject = line["subject"]
-    # query = f"The following are multiple choice questions (with answers) about {subject.replace('_', ' ')}.\n\nQuestion: {line['question']}"
-    query = f"The following are multiple choice questions (with answers) \n\nQuestion: {line['translated_question']}"
-    query += "".join([f"\n{key}. {choice}" for key, choice in zip(LETTER_INDICES, line["translated_choices"])])
-    query += "\nAnswer:"
-
-    gold_ix = LETTER_INDICES.index(line["answer"]) if isinstance(line["answer"], str) else line["answer"]
-
-    return Doc(
-        task_name=task_name,
-        query=query,
-        choices=[" A", " B", " C", " D"],
-        gold_index=gold_ix,
-        # instruction=f"The following are multiple choice questions (with answers) about {subject.replace('_', ' ')}.\n\n",
-        instruction=f"The following are multiple choice questions (with answers) \n\n",
-        target_for_fewshot_sorting=line["translated_choices"][gold_ix],  # specific to HELM evals
-    )
 
 
 def mmlu_qa_abstract_algebra(line, task_name: str = None):
