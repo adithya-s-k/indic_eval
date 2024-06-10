@@ -111,7 +111,7 @@ def flores_enxx_indic(line, task_name: str = None):
                     """,
         choices=[line["target"]],
         gold_index=0,
-        instruction=f"Translate the following:{line["source"]} to {language}",
+        instruction=f"""Translate the following:{line["source"]} to {language}""",
     )
 
 def flores_xxen_indic(line, task_name: str = None):
@@ -130,7 +130,7 @@ def flores_xxen_indic(line, task_name: str = None):
                     """,
         choices=[line["target"]],
         gold_index=0,
-        instruction=f"Translate the following:{line["source"]} to english.",
+        instruction=f"""Translate the following:{line["source"]} to english.""",
     )
 
 def xquad_indic(line, task_name: str = None):
